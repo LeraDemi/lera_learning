@@ -3,8 +3,6 @@
 int main(int argv, char* argc[])
 {
 	char c;
-	//char buffer[0x1000]= {0};
-	FILE* myFile;
 	for(int i = 1; i <  argv; i++){
 	   myFile = fopen(argc[i], "r");
 	   if (!myFile)
