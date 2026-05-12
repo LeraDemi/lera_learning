@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	   myFile = open(argv[i], O_RDONLY);
 	   if (myFile < 0)
 	   {
-		   printf("Error openning file!\n");
+		   printf("Error openning file!\n\n");
 		   continue;
 	   }
 	   memset(buff, 0, BUFF_SIZE);
