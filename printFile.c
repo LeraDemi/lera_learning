@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 
 	int myFile;
 	char buff[BUFF_SIZE];
-	int debug;
+	int rdRes;
 	for(int i = 1; i <  argc; i++)
 	{
 	   myFile = open(argv[i], O_RDONLY);
@@ -20,10 +20,9 @@ int main(int argc, char* argv[])
 		   continue;
 	   }
 	   memset(buff, 0, BUFF_SIZE);
-	   while((debug = read(myFile, buff, BUFF_SIZE)) > 0)
+	   while((rdRes = read(myFile, buff, BUFF_SIZE)) > 0)
 	   {
-		  //printf("%d\n",debug);
-	      write(STDOUT_FILENO, buff, debug);
+	      write(STDOUT_FILENO, buff, rdRes);
        }
        printf("\n");
 	   close(myFile);
