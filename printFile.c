@@ -9,21 +9,48 @@ int main(int argc, char* argv[])
 {
 
 	int myFile;
-	char buff[BUFF_SIZE];
 	int rdRes;
+	int wrRes;
+	int fileSize;
+	char* buff;
 	for(int i = 1; i <  argc; i++)
 	{
 	   myFile = open(argv[i], O_RDONLY);
+	   
 	   if (myFile < 0)
 	   {
 		   printf("Error openning file!\n\n");
 		   continue;
 	   }
-	   memset(buff, 0, BUFF_SIZE);
-	   while((rdRes = read(myFile, buff, BUFF_SIZE)) > 0)
+	   
+	   fileSize = lseek(myFile, 0, SEEK_END);
+	   
+	   lseek(myFile, 0, SEEK_SET);
+	   
+	   buff = (char*)malloc(sizeof(char	) * fileSize);
+	   if(!buff)
 	   {
-	      write(STDOUT_FILENO, buff, rdRes);
-       }
+		     printf("Error Allocating Buffer!\n\n");
+		     continue;
+	   }
+	   
+	   memset(buff, 0, fileSize);
+	   
+	   rdRes = read(myFile, buff, fileSize); 
+
+	   if(rdRes < 0)
+       {
+		   printf("Error While Reading!\n\n");
+		   continue;
+	   }
+	   wrRes = write(STDOUT_FILENO, buff, rdRes);
+	   
+	   if(wrRes < 0)
+	   {
+		   printf("Error While Printing!\n\n");
+		   continue;
+	   }
+	   free(buff);
        printf("\n");
 	   close(myFile);
    }
