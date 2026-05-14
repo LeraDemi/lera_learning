@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
    printf("fileSize = %d\n", fileSize);
    printf("sizeToPrint = %d\n", sizeToPrint);
    
-   for(i = 0; i < 1; i++)
+   for(i = 0; i < 4; i++)
    {
-	   printf("for loop %ld\n",lseek(myFile, 0, SEEK_CUR));
+	  // printf("for loop %ld\n",lseek(myFile, 0, SEEK_CUR));
 	//   printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
 	  // printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
 	   if(lseek(myFile, 0, SEEK_CUR) > 0)
