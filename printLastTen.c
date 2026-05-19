@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
+
 
 
 void goToBeginingOfLine(int fd)
@@ -30,22 +32,34 @@ int main(int argc, char* argv[])
    int sizeToPrint = 0;
    int rdRes;
    int wrRes;
-   
+   struct stat sStat;
+
    myFile = open(argv[1], O_RDONLY);
    
-   fileSize = lseek(myFile, 0, SEEK_END);
-   printf("lseek(myFile, 0, SEEK_CUR) = %ld\n", lseek(myFile, 0, SEEK_CUR));
-   printf("fileSize = %d\n", fileSize);
-   printf("sizeToPrint = %d\n", sizeToPrint);
-   
-   for(i = 0; i < 10; i++)
+   if (myFile < 0)
+    {
+	   printf("Error openning file!\n");
+	   close(myFile);
+	   return myFile;
+    }
+    
+    if(fstat(myFile, &sStat) == 0)
+    {
+	   fileSize = sStat.st_size;
+	   printf("fileSize = %d\n",fileSize );
+    }
+    else
+    {
+		 printf("Error File Size!\n\n");
+		 close(myFile);
+		 return -1;
+    }
+    lseek(myFile, 0, SEEK_END);
+   for(i = 0; i < 11; i++)
    {
-	  // printf("for loop %ld\n",lseek(myFile, 0, SEEK_CUR));
-	//   printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
-	  // printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
+
 	   if(lseek(myFile, 0, SEEK_CUR) > 0)
 	   {
-		   lseek(myFile, -1, SEEK_CUR);
 		   goToBeginingOfLine(myFile);
 	   }
 	   else
@@ -55,9 +69,7 @@ int main(int argc, char* argv[])
    }
    
    sizeToPrint = fileSize - lseek(myFile, 0, SEEK_CUR);
-   printf("lseek(myFile, 0, SEEK_CUR) = %ld\n", lseek(myFile, 0, SEEK_CUR));
-   printf("fileSize = %d\n", fileSize);
-   printf("sizeToPrint = %d\n", sizeToPrint);
+
    
    /******************************
     * PRINT
@@ -67,6 +79,7 @@ int main(int argc, char* argv[])
    if(!buff)
    {
 		 printf("Error Allocating Buffer!\n\n");
+		 close(myFile);
 		 return -1;
    }
    
