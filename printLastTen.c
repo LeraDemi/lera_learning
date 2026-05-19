@@ -38,14 +38,14 @@ int main(int argc, char* argv[])
    printf("fileSize = %d\n", fileSize);
    printf("sizeToPrint = %d\n", sizeToPrint);
    
-   for(i = 0; i < 4; i++)
+   for(i = 0; i < 10; i++)
    {
 	  // printf("for loop %ld\n",lseek(myFile, 0, SEEK_CUR));
 	//   printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
 	  // printf("%ld\n",lseek(myFile, -1, SEEK_CUR));
 	   if(lseek(myFile, 0, SEEK_CUR) > 0)
 	   {
-		
+		   lseek(myFile, -1, SEEK_CUR);
 		   goToBeginingOfLine(myFile);
 	   }
 	   else
@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
    if(rdRes < 0)
    {
 	   printf("Error While Reading!\n\n");
+	   close(myFile);
 	   return -1;
 	   
    }
@@ -84,6 +85,7 @@ int main(int argc, char* argv[])
    if(wrRes < 0)
    {
 	   printf("Error While Printing!\n\n");
+	   close(myFile);
 	   return -1;
    }
    free(buff);

@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     if (myFile < 0)
     {
 	   printf("Error openning file!\n");
+	    close(myFile);
 	   return myFile;
     }
     for(i = 0; i < 10; i++)
