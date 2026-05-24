@@ -4,6 +4,13 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+
+#define BUFF_SIZE 0x200
+
+void* buff[BUFF_SIZE];
+
+
+
 int printLine(int fd)
 {
 	char c;
@@ -23,18 +30,37 @@ int main(int argc, char* argv[])
 
 	int myFile;
 	int i = 0;
+	int rdRes = 0;
 
     myFile = open(argv[1], O_RDONLY);
+    
     if (myFile < 0)
     {
-	   printf("Error openning file!\n");
-	    close(myFile);
-	   return myFile;
+		perror("Error openning file! ");
+		return EXIT_FAILURE;
     }
-    for(i = 0; i < 10; i++)
+    
+    int bytesRead = 0;
+    for(i = 0; i < 1; i++)
     {
-	  printLine(myFile);
+	  bytesRead = 0;
+	 // printLine(myFile);
+	  do
+      {
+		if((rdRes = read(myFile, buff + rdRes, BUFF_SIZE - bytesRead))>= 0)
+		{
+	     	bytesRead += rdRes;
+	    }
+	    else 
+	    {
+			perror("Error reading file! ");
+			return EXIT_FAILURE;
+		}
+		
+	   }while(rdRes > 0);
+	    
     }
+    printf("%s\n", (char*)buff);
     close(myFile);
    
     return 0;

@@ -20,6 +20,7 @@ void goToBeginingOfLine(int fd)
 	   read(fd, &c, 1);
 	   lseek(fd, -1, SEEK_CUR);	
 	}
+	printf("\n NEW LINE \n");
 
 }
 
@@ -28,11 +29,12 @@ int main(int argc, char* argv[])
    int myFile;
    int i = 0;
    char* buff;
-   int fileSize;
-   int sizeToPrint = 0;
+   unsigned int fileSize;
+   unsigned int sizeToPrint = 0;
    int rdRes;
    int wrRes;
    struct stat sStat;
+   char c;
 
    myFile = open(argv[1], O_RDONLY);
    
@@ -46,7 +48,7 @@ int main(int argc, char* argv[])
     if(fstat(myFile, &sStat) == 0)
     {
 	   fileSize = sStat.st_size;
-	   printf("fileSize = %d\n",fileSize );
+	   
     }
     else
     {
@@ -54,8 +56,25 @@ int main(int argc, char* argv[])
 		 close(myFile);
 		 return -1;
     }
-    lseek(myFile, 0, SEEK_END);
-   for(i = 0; i < 11; i++)
+    printf("fileSize = %d\n",fileSize );
+    if (fileSize == 0 )
+    {
+		printf("Empty File/n/n");
+		return 0;
+	}
+	
+    lseek(myFile, -1, SEEK_END);
+    
+    if(read(myFile,&c, 1))
+    {
+		if(c != '\n')
+		{
+			lseek(myFile, 0, SEEK_END);
+		}
+	}
+    
+    
+   for(i = 0; i < 4; i++)
    {
 
 	   if(lseek(myFile, 0, SEEK_CUR) > 0)
