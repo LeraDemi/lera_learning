@@ -9,20 +9,43 @@
 
 void* buff[BUFF_SIZE];
 
-
-
-int printLine(int fd)
+static int readIntoBuffer(int fd)
 {
-	char c;
-	do
-	{
-		if(read(fd,&c, 0x1))
+		int rdRes = 0;
+		int bytesRead;
+		do
 		{
-		   write(STDOUT_FILENO, &c, 0x1);
-	    }
-	    else return 1;
-	}while(c !='\n');
-    return 0;
+			bytesRead = 0;
+			if((rdRes = read(fd, buff + rdRes, BUFF_SIZE - bytesRead))>= 0)
+			{
+				bytesRead += rdRes;
+			}
+			else 
+			{
+				perror("Error reading file! ");
+				return 0;
+			}
+	   }while(rdRes > 0);
+	   return 1;
+}
+
+static int printLine(void* buff, unsigned size)
+{
+	int written = 0; 
+	int	wrRes;
+	while(written < size)
+	{
+		if((wrRes = write(STDOUT_FILENO, buff + written, size - written)) > 0)
+		{
+			written += wrRes;
+		}
+		else
+		{
+			perror("Error Printing Buffer");
+			return 0;
+		}
+	}
+	return 1;
 }
 
 int main(int argc, char* argv[])
@@ -30,8 +53,7 @@ int main(int argc, char* argv[])
 
 	int myFile;
 	int i = 0;
-	int rdRes = 0;
-
+    char* pBuff = (char*)buff;
     myFile = open(argv[1], O_RDONLY);
     
     if (myFile < 0)
@@ -40,29 +62,30 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
     }
     
-    int bytesRead = 0;
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < 10; i++)
     {
-	  bytesRead = 0;
-	 // printLine(myFile);
-	  do
-      {
-		if((rdRes = read(myFile, buff + rdRes, BUFF_SIZE - bytesRead))>= 0)
+		if(readIntoBuffer(myFile))
 		{
-	     	bytesRead += rdRes;
-	    }
-	    else 
-	    {
-			perror("Error reading file! ");
-			return EXIT_FAILURE;
+			int i;
+			int count = 0;
+			for(i = 0; i < BUFF_SIZE; i++)
+			{
+				count++;
+				if(pBuff[i] == '\n')
+				{
+					printLine(pBuff, count);
+					pBuff+= count;
+					break;
+				}
+			} 
 		}
-		
-	   }while(rdRes > 0);
-	    
+		else
+		{
+			goto end;
+		}   
     }
-    printf("%s\n", (char*)buff);
-    close(myFile);
-   
-    return 0;
+    end:
+		close(myFile);
+		return 0;
 }
 

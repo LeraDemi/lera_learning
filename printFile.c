@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 		}
 	  }
 	
-	buff = malloc(sizeof(char) * maxFileSize);
+	buff = malloc(maxFileSize);
 		   
 	if(!buff)
 	{
