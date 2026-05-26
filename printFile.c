@@ -9,15 +9,14 @@
 int main(int argc, char* argv[])
 {
 	int myFile;
-	int rdRes;
-	int wrRes;
 	void* buff;
 	struct stat sStat;
 	unsigned int maxFileSize = 0;
-
-	for(int i = 1; i < argc; i++)
+    int fileIndx;
+    
+	for(fileIndx = 1; fileIndx < argc; fileIndx++)
 	{
-		if(lstat(argv[i], &sStat) == 0)
+		if(stat(argv[fileIndx], &sStat) == 0)
 		{
 			if(sStat.st_size > maxFileSize )
 			{
@@ -41,6 +40,8 @@ int main(int argc, char* argv[])
 	
 	for(int i = 1; i <  argc; i++)
 	{
+		int rdRes;
+		int wrRes;
 		myFile = open(argv[i], O_RDONLY);
 		
 		if (myFile < 0)
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 			perror("Error openning file!");
 		    continue;
 		}
-	   
+
 		while((rdRes = read(myFile, buff, maxFileSize)) > 0)
 		{
 			int written = 0; 
