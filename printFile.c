@@ -1,17 +1,42 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <errno.h>
+
+static void printFile(int fd, void* buff, size_t size)
+{
+	ssize_t rdRes;
+	ssize_t wrRes;
+	while((rdRes = read(fd, buff, size)) > 0)
+	{
+		size_t written = 0;
+		while(written < rdRes)
+		{
+			if((wrRes = write(STDOUT_FILENO, buff + written, rdRes - written)) > 0)
+			{
+				written += wrRes;
+			}
+			else
+			{
+				perror("Error Printing Buffer");
+				return;
+			}
+		}
+	}
+
+	if(rdRes < 0)
+	{
+		perror("Error While Reading");
+	}
+}
 
 int main(int argc, char* argv[])
 {
 	int myFile;
 	void* buff;
 	struct stat sStat;
-	unsigned int maxFileSize = 0;
+	size_t maxFileSize = 0;
     int fileIndx;
     
 	for(fileIndx = 1; fileIndx < argc; fileIndx++)
@@ -38,11 +63,9 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 	
-	for(int i = 1; i <  argc; i++)
+	for(fileIndx = 1; fileIndx < argc; fileIndx++)
 	{
-		int rdRes;
-		int wrRes;
-		myFile = open(argv[i], O_RDONLY);
+		myFile = open(argv[fileIndx], O_RDONLY);
 		
 		if (myFile < 0)
 		{
@@ -50,30 +73,8 @@ int main(int argc, char* argv[])
 		    continue;
 		}
 
-		while((rdRes = read(myFile, buff, maxFileSize)) > 0)
-		{
-			int written = 0; 
-			while(written < rdRes)
-			{
-				if((wrRes = write(STDOUT_FILENO, buff + written, rdRes - written)) > 0)
-				{
-					written += wrRes;
-				}
-				else
-				{
-					perror("Error Printing Buffer");
-					goto next_file;
-				}
-			}
-		}
-		
-		if(rdRes < 0)
-		{
-			perror("Error While Reading");
-			goto next_file;
-		}
-	   
-	next_file:
+		printFile(myFile, buff, maxFileSize);
+
 		close(myFile);
 	} 
 	
