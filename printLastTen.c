@@ -5,124 +5,76 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#define BUFF_SIZE 0x1000
+char buff[];
 
 
-void goToBeginingOfLine(int fd)
+static int countLines()
 {
-	char c = 0;
-	while (c != '\n')
+	int i;
+	unsigned count = 0;
+	for(i = 0; i < BUFF_SIZE; i++)
 	{
-		if(!lseek(fd, 0, SEEK_CUR))
+		if(buff[i] == '\n')
 		{
-			return;
+			count++;
 		}
-	   lseek(fd, -1, SEEK_CUR);
-	   read(fd, &c, 1);
-	   lseek(fd, -1, SEEK_CUR);	
 	}
-	printf("\n NEW LINE \n");
+	return count;
+}
 
+static char* setArrayPtr(unsigned lineCount)
+{
+	int i;
+	char* pBuff;
+	for(i = 0; i < BUFF_SIZE; i++)
+	{
+		if(buff[i] == '\n')
+		{
+			pBuff = buff + (i + 1);
+			lineCount--;
+			if(lineCount == 0)
+			{
+				break;
+			}
+		}
+	}
+	return pBuff;
+}
+
+static int readIntoBuffer(int fd)
+{
+	int rdRes = 0;
+	int bytesRead = 0;
+	do
+	{
+		if((rdRes = read(fd, buff + rdRes, BUFF_SIZE - bytesRead))>= 0)
+		{
+			bytesRead += rdRes;
+		}
+		else 
+		{
+			perror("Error reading file! ");
+			return 0;
+		}
+   }while(rdRes > 0);
+   return 1;
 }
 
 int main(int argc, char* argv[])
 {
-   int myFile;
-   int i = 0;
-   char* buff;
-   unsigned int fileSize;
-   unsigned int sizeToPrint = 0;
-   int rdRes;
-   int wrRes;
-   struct stat sStat;
-   char c;
-
-   myFile = open(argv[1], O_RDONLY);
-   
-   if (myFile < 0)
-    {
-	   printf("Error openning file!\n");
-	   close(myFile);
-	   return myFile;
-    }
+	int myFile;
+	myFile = open(argv[1], O_RDONLY);
     
-    if(fstat(myFile, &sStat) == 0)
-    {
-	   fileSize = sStat.st_size;
-	   
-    }
-    else
-    {
-		 printf("Error File Size!\n\n");
-		 close(myFile);
-		 return -1;
-    }
-    printf("fileSize = %d\n",fileSize );
-    if (fileSize == 0 )
-    {
-		printf("Empty File/n/n");
-		return 0;
+	if (myFile < 0)
+	{
+		perror("Error openning file! ");
+		return EXIT_FAILURE;
 	}
-	
-    lseek(myFile, -1, SEEK_END);
+	readIntoBuffer(myFile);
     
-    if(read(myFile,&c, 1))
-    {
-		if(c != '\n')
-		{
-			lseek(myFile, 0, SEEK_END);
-		}
-	}
-    
-    
-   for(i = 0; i < 4; i++)
-   {
 
-	   if(lseek(myFile, 0, SEEK_CUR) > 0)
-	   {
-		   goToBeginingOfLine(myFile);
-	   }
-	   else
-	   {
-		   break;
-	   }
-   }
-   
-   sizeToPrint = fileSize - lseek(myFile, 0, SEEK_CUR);
 
-   
-   /******************************
-    * PRINT
-    * ****************************/
-   
-   buff = (char*)malloc(sizeof(char	) * sizeToPrint);
-   if(!buff)
-   {
-		 printf("Error Allocating Buffer!\n\n");
-		 close(myFile);
-		 return -1;
-   }
-   
-   memset(buff, 0, sizeToPrint);
-   
-   rdRes = read(myFile, buff, sizeToPrint); 
-   if(rdRes < 0)
-   {
-	   printf("Error While Reading!\n\n");
-	   close(myFile);
-	   return -1;
-	   
-   }
-   wrRes = write(STDOUT_FILENO, buff, sizeToPrint	);
-   
-   if(wrRes < 0)
-   {
-	   printf("Error While Printing!\n\n");
-	   close(myFile);
-	   return -1;
-   }
-   free(buff);
-   
-   close(myFile);
    return 0;
 }
 
