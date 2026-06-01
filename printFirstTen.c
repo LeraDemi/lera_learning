@@ -78,6 +78,7 @@ int main(int argc, char* argv[])
 {
 	int myFile;
 	int fileSize;
+	int readStatus;
 	char* buff;
 
 	myFile = open(argv[1], O_RDONLY);
@@ -104,12 +105,16 @@ int main(int argc, char* argv[])
 	{
 		return EXIT_SUCCESS;
 	}
-	while(readIntoBuffer(myFile, buff, fileSize))
+	while(readStatus = readIntoBuffer(myFile, buff, fileSize))
 	{
 		if(!printTenLines(buff, fileSize))
 		{
 			break;
 		}
+	}
+	if(readStatus < 0)
+	{
+		return EXIT_FAILURE;
 	}
 	close(myFile);
 	return EXIT_SUCCESS;
