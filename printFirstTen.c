@@ -111,7 +111,6 @@ int main(int argc, char* argv[])
 			break;
 		}
 	}
-	if()
 	close(myFile);
 	return EXIT_SUCCESS;
 }
