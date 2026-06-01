@@ -68,10 +68,10 @@ static int readIntoBuffer(int fd, char* buff,  size_t size)
 			else
 			{
 				perror("Error reading file! ");
-				return 0;
+				return -1;
 			}
 	   }while(rdRes > 0);
-	   return 1;
+	   return bytesRead;
 }
 
 int main(int argc, char* argv[])
@@ -79,6 +79,7 @@ int main(int argc, char* argv[])
 	int myFile;
 	int fileSize;
 	char* buff;
+
 	myFile = open(argv[1], O_RDONLY);
     
 	if (myFile < 0)
@@ -95,23 +96,23 @@ int main(int argc, char* argv[])
 			return EXIT_FAILURE;
 		}
 	}
-	else if(fileSize == 0)
+	else if(fileSize < 0)
 	{
-		printf("Empty File!\n");
 		return EXIT_FAILURE;
 	}
 	else
 	{
-		return EXIT_FAILURE;
+		return EXIT_SUCCESS;
 	}
 	while(readIntoBuffer(myFile, buff, fileSize))
 	{
-		if(printTenLines(buff, fileSize))
+		if(!printTenLines(buff, fileSize))
 		{
 			break;
 		}
 	}
+	if()
 	close(myFile);
-	return 0;
+	return EXIT_SUCCESS;
 }
 
