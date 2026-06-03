@@ -6,21 +6,25 @@
 #include <sys/stat.h>
 
 #define BUFF_SIZE 0x1000
-char buff[BUFF_SIZE];
+char buff[BUFF_SIZE] = {0};
 
-
-static int countLines(unsigned bytes)
+static int countLines(size_t bytes)
 {
 	int i;
-	unsigned count = 0;
+	size_t lineCount = 0;
 	for(i = 0; i < bytes; i++)
 	{
 		if(buff[i] == '\n')
 		{
-			count++;
+			lineCount++;
 		}
 	}
-	return count;
+
+	if(buff[bytes - 1] != '\n')
+	{
+		lineCount++;
+	}
+	return lineCount;
 }
 
 static char* setArrayPtr(unsigned lineCount)
@@ -83,11 +87,11 @@ static int printBuffer(char* buff, unsigned size)
 int main(int argc, char* argv[])
 {
 	int myFile;
-	unsigned bytes;
-	unsigned numOfLines;
+	size_t bytes;
+	size_t numOfLines;
 	char* pBuff;
 	myFile = open(argv[1], O_RDONLY);
-    
+
 	if (myFile < 0)
 	{
 		perror("Error openning file! ");
@@ -96,6 +100,7 @@ int main(int argc, char* argv[])
 
 	bytes = readIntoBuffer(myFile);
 	numOfLines = countLines(bytes);
+
 	if(numOfLines < 10)
 	{
 		printBuffer(buff,bytes);
