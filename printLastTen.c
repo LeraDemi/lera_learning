@@ -6,14 +6,14 @@
 #include <sys/stat.h>
 
 #define BUFF_SIZE 0x1000
-char buff[];
+char buff[BUFF_SIZE];
 
 
-static int countLines()
+static int countLines(unsigned bytes)
 {
 	int i;
 	unsigned count = 0;
-	for(i = 0; i < BUFF_SIZE; i++)
+	for(i = 0; i < bytes; i++)
 	{
 		if(buff[i] == '\n')
 		{
@@ -57,13 +57,35 @@ static int readIntoBuffer(int fd)
 			perror("Error reading file! ");
 			return 0;
 		}
-   }while(rdRes > 0);
-   return 1;
+   }
+   while(rdRes > 0);
+   return bytesRead;
 }
 
+static int printBuffer(char* buff, unsigned size)
+{
+	int written = 0;
+	int	wrRes;
+	while(written < size)
+	{
+		if((wrRes = write(STDOUT_FILENO, buff + written, size - written)) > 0)
+		{
+			written += wrRes;
+		}
+		else
+		{
+			perror("Error Printing Buffer");
+			return 0;
+		}
+	}
+	return 1;
+}
 int main(int argc, char* argv[])
 {
 	int myFile;
+	unsigned bytes;
+	unsigned numOfLines;
+	char* pBuff;
 	myFile = open(argv[1], O_RDONLY);
     
 	if (myFile < 0)
@@ -71,11 +93,20 @@ int main(int argc, char* argv[])
 		perror("Error openning file! ");
 		return EXIT_FAILURE;
 	}
-	readIntoBuffer(myFile);
-    
 
-
-   return 0;
+	bytes = readIntoBuffer(myFile);
+	numOfLines = countLines(bytes);
+	if(numOfLines < 10)
+	{
+		printBuffer(buff,bytes);
+		return EXIT_SUCCESS;
+	}
+	else
+	{
+		pBuff = setArrayPtr(numOfLines - 10);
+		printBuffer(pBuff,bytes - (pBuff - buff));
+	}
+	return EXIT_SUCCESS;
 }
 
 
