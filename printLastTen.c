@@ -90,7 +90,17 @@ int main(int argc, char* argv[])
 	size_t bytes;
 	size_t numOfLines;
 	char* pBuff;
-	myFile = open(argv[1], O_RDONLY);
+
+	if(argc > 1)
+	{
+		myFile = open(argv[1], O_RDONLY);
+	}
+	else
+	{
+		printf("File Please\n ");
+		return EXIT_FAILURE;
+	}
+
 
 	if (myFile < 0)
 	{
