@@ -35,13 +35,13 @@ static int printLine(void* buff, unsigned size)
 	return 1;
 }
 
-static int printTenLines(char* buff, size_t size, unsigned *lineCount)
+static int printTenLines(void* buff, size_t size, unsigned *lineCount)
 {
 	int i;
-
+	char* pBuff = (char*)buff;
 	for(i = 0; i < size; i++)
 	{
-		if(buff[i] == '\n')
+		if(pBuff[i] == '\n')
 		{
 			(*lineCount)--;
 			if(*lineCount == 0)
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 	int myFile;
 	int fileSize;
 	int readStatus;
-	char* buff;
+	void* buff;
 	unsigned lineCount = 10;
 
 	myFile = open(argv[1], O_RDONLY);
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 	}
 	if((fileSize = getFileSize(myFile) )> 0)
 	{
-		buff = (char*)malloc(fileSize);
+		buff = malloc(fileSize);
 		if(!buff)
 		{
 			perror("Error Allocating Buffer!\n");
