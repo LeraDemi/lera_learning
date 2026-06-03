@@ -16,7 +16,7 @@ static int getFileSize(int fd)
 	return sStat.st_size;
 }
 
-static int printLine(void* buff, unsigned size)
+static int printLine(void* buff, size_t size)
 {
 	int written = 0;
 	int	wrRes;
