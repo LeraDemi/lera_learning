@@ -35,16 +35,16 @@ static int printLine(void* buff, unsigned size)
 	return 1;
 }
 
-static int printTenLines(char* buff, size_t size)
+static int printTenLines(char* buff, size_t size, unsigned *lineCount)
 {
 	int i;
-	static int lineCount = 0;
+
 	for(i = 0; i < size; i++)
 	{
 		if(buff[i] == '\n')
 		{
-			lineCount++;
-			if(lineCount == 10)
+			(*lineCount)--;
+			if(*lineCount == 0)
 			{
 				printLine(buff, i + 1);
 				return 1;
@@ -70,7 +70,8 @@ static int readIntoBuffer(int fd, char* buff,  size_t size)
 				perror("Error reading file! ");
 				return -1;
 			}
-	   }while(rdRes > 0);
+	   }
+	   while(rdRes > 0);
 	   return bytesRead;
 }
 
@@ -80,6 +81,7 @@ int main(int argc, char* argv[])
 	int fileSize;
 	int readStatus;
 	char* buff;
+	unsigned lineCount = 10;
 
 	myFile = open(argv[1], O_RDONLY);
     
@@ -105,13 +107,17 @@ int main(int argc, char* argv[])
 	{
 		return EXIT_SUCCESS;
 	}
-	while(readStatus = readIntoBuffer(myFile, buff, fileSize))
+	if((readStatus = readIntoBuffer(myFile, buff, fileSize)) > 0)
 	{
-		if(!printTenLines(buff, fileSize))
+		while(lineCount > 0)
 		{
-			break;
+			if(!printTenLines(buff, fileSize, &lineCount))
+			{
+				break;
+			}
 		}
 	}
+
 	if(readStatus < 0)
 	{
 		return EXIT_FAILURE;
