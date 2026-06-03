@@ -83,8 +83,16 @@ int main(int argc, char* argv[])
 	void* buff;
 	unsigned lineCount = 10;
 
-	myFile = open(argv[1], O_RDONLY);
-    
+	if(argc > 1)
+	{
+		myFile = open(argv[1], O_RDONLY);
+	}
+	else
+	{
+		printf("File Please\n ");
+		return EXIT_FAILURE;
+	}
+
 	if (myFile < 0)
 	{
 		perror("Error openning file! ");
