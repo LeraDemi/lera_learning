@@ -98,23 +98,25 @@ int main(int argc, char* argv[])
 		perror("Error openning file! ");
 		return EXIT_FAILURE;
 	}
-	if((fileSize = getFileSize(myFile) )> 0)
-	{
-		buff = malloc(fileSize);
-		if(!buff)
-		{
-			perror("Error Allocating Buffer!\n");
-			return EXIT_FAILURE;
-		}
-	}
-	else if(fileSize < 0)
+
+	fileSize = getFileSize(myFile);
+
+	if(fileSize < 0)
 	{
 		return EXIT_FAILURE;
 	}
-	else
+	if(fileSize == 0)
 	{
 		return EXIT_SUCCESS;
 	}
+
+	buff = malloc(fileSize);
+	if(!buff)
+	{
+		perror("Error Allocating Buffer!\n");
+		return EXIT_FAILURE;
+	}
+
 	if((readStatus = readIntoBuffer(myFile, buff, fileSize)) > 0)
 	{
 		while(lineCount > 0)
