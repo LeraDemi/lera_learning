@@ -8,42 +8,24 @@
 #define BUFF_SIZE 0x1000
 char buff[BUFF_SIZE] = {0};
 
-static int countLines(size_t bytes)
+static char* countTenLines(size_t bytes)
 {
 	int i;
 	size_t lineCount = 0;
-	for(i = 0; i < bytes; i++)
+	char* retPointer;
+	for(i = bytes-2; i >= 0; i--)
 	{
 		if(buff[i] == '\n')
 		{
 			lineCount++;
 		}
-	}
-
-	if(buff[bytes - 1] != '\n')
-	{
-		lineCount++;
-	}
-	return lineCount;
-}
-
-static char* setArrayPtr(unsigned lineCount)
-{
-	int i;
-	char* pBuff;
-	for(i = 0; i < BUFF_SIZE; i++)
-	{
-		if(buff[i] == '\n')
+		if(lineCount == 10)
 		{
-			pBuff = buff + (i + 1);
-			lineCount--;
-			if(lineCount == 0)
-			{
 				break;
-			}
 		}
 	}
-	return pBuff;
+	retPointer = buff + i + 1;
+	return retPointer;
 }
 
 static int readIntoBuffer(int fd)
@@ -88,8 +70,7 @@ int main(int argc, char* argv[])
 {
 	int myFile;
 	size_t bytes;
-	size_t numOfLines;
-	char* pBuff;
+	void* pBuff;
 
 	if(argc > 1)
 	{
@@ -101,7 +82,6 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-
 	if (myFile < 0)
 	{
 		perror("Error openning file! ");
@@ -109,18 +89,8 @@ int main(int argc, char* argv[])
 	}
 
 	bytes = readIntoBuffer(myFile);
-	numOfLines = countLines(bytes);
-
-	if(numOfLines < 10)
-	{
-		printBuffer(buff,bytes);
-		return EXIT_SUCCESS;
-	}
-	else
-	{
-		pBuff = setArrayPtr(numOfLines - 10);
-		printBuffer(pBuff,bytes - (pBuff - buff));
-	}
+	pBuff = countTenLines(bytes);
+	printBuffer(pBuff,bytes);
 	return EXIT_SUCCESS;
 }
 
