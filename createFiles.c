@@ -6,6 +6,9 @@
 #include <errno.h>
 #include <string.h>
 
+#define LINE_NUM 3
+#define LINE_LEN 10
+
 int incr(char* a)
 {
 	for(int i = 0; i < 37; i++)
@@ -48,21 +51,28 @@ int main(int argc, char* argv[])
 {
 	
 	
-	char str[38];
-	memset(str,'0', 37);
-	str[37] = '\n';
+	char str[LINE_LEN];
+	memset(str,'0', LINE_LEN);
+	str[LINE_LEN - 1] = '\n';
 	char fileName[20];
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 2; i++)
 	{
 		
-		snprintf(fileName, sizeof(fileName), "testFiles/%d.txt", i);
+		snprintf(fileName, sizeof(fileName), "testFiles2/%d.txt", i);
 		int fd = open(fileName, O_CREAT | O_WRONLY, S_IRGRP | S_IWUSR | S_IRUSR);
-		for(int i = 0; i < 100000; i++)
-		{	
+		for(int i = 0; i < LINE_NUM; i++)
+		{
+#ifdef NOEOL
+			if(i == (LINE_NUM - 1))
+			{
+				str[LINE_LEN -1 ]  = '!';
+			}
+#endif
 			if(!incr(str))
 			{
-				write(fd, str, 38);
+				write(fd, str, LINE_LEN);
 			}
+
 		}
 		close(fd);
 	}	
