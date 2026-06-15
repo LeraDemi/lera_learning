@@ -134,7 +134,13 @@ int main(int argc, char* argv[])
 		perror("Error openning file! ");
 		return EXIT_FAILURE;
 	}
+	
 	fileSize = getFileSize(myFile);
+	
+	if(fileSize < 0)
+	{
+		return EXIT_FAILURE;
+	}
 	buff = malloc(fileSize);
 	if(!buff)
 	{
