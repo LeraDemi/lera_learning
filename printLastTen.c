@@ -18,7 +18,7 @@
 static ssize_t getFileSize(int fd)
 {
 	struct stat sStat;
-	if(!fstat(fd, &sStat))
+	if(fstat(fd, &sStat))
 	{
 		perror("Error File Size!");
 		return -1;
