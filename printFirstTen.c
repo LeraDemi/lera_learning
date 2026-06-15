@@ -5,10 +5,10 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-static int getFileSize(int fd)
+static ssize_t getFileSize(int fd)
 {
 	struct stat sStat;
-	if(!fstat(fd, &sStat) == 0)
+	if(fstat(fd, &sStat))
 	{
 		perror("Error File Size!");
 		return -1;
@@ -18,7 +18,7 @@ static int getFileSize(int fd)
 
 static int printLine(void* buff, size_t size)
 {
-	int written = 0;
+	size_t written = 0;
 	int	wrRes;
 	while(written < size)
 	{
@@ -35,10 +35,10 @@ static int printLine(void* buff, size_t size)
 	return 1;
 }
 
-static int printTenLines(void* buff, size_t size, unsigned *lineCount)
+static int printTenLines(void* buff, size_t size, ssize_t *lineCount)
 {
 	int i;
-	char* pBuff = (char*)buff;
+	char* pBuff = buff;
 	for(i = 0; i < size; i++)
 	{
 		if(pBuff[i] == '\n')
@@ -78,21 +78,18 @@ static int readIntoBuffer(int fd, char* buff,  size_t size)
 int main(int argc, char* argv[])
 {
 	int myFile;
-	int fileSize;
+	ssize_t fileSize;
 	int readStatus;
 	void* buff;
-	unsigned lineCount = 10;
+	ssize_t lineCount = 10;
 
-	if(argc > 1)
-	{
-		myFile = open(argv[1], O_RDONLY);
-	}
-	else
+	if(argc <= 1)
 	{
 		printf("File Please\n ");
 		return EXIT_FAILURE;
 	}
 
+	myFile = open(argv[1], O_RDONLY);
 	if (myFile < 0)
 	{
 		perror("Error openning file! ");
