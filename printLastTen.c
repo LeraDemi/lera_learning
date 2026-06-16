@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
 	}
 	pBuff = countTenLines(fileSize, buff);
 
-	if(!printBuffer(pBuff,fileSize))
+	if(!printBuffer(pBuff, buff + fileSize - pBuff))
 	{
 		return EXIT_FAILURE;
 	}
