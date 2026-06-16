@@ -96,6 +96,8 @@ static int readIntoBuffer(int fd, void* buff, size_t size)
  * 
  * This fuction calls write command to write bytes from buffer to output
  * 
+ * @param buff - Pionter to buffer to print
+ * @param size - Num of bytes to print
  * */
 static int printBuffer(char* buff, unsigned size)
 {
