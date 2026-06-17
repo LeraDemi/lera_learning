@@ -16,10 +16,10 @@ static ssize_t getFileSize(int fd)
 	return sStat.st_size;
 }
 
-static int printLine(void* buff, size_t size)
+static int printLine(const void* buff, size_t size)
 {
 	size_t written = 0;
-	int	wrRes;
+	ssize_t	wrRes;
 	while(written < size)
 	{
 		if((wrRes = write(STDOUT_FILENO, buff + written, size - written)) > 0)
@@ -35,10 +35,10 @@ static int printLine(void* buff, size_t size)
 	return 1;
 }
 
-static int printTenLines(void* buff, size_t size, ssize_t *lineCount)
+static int printTenLines(const void* buff, size_t size, ssize_t *lineCount)
 {
 	int i;
-	char* pBuff = buff;
+	const char* pBuff = buff;
 	for(i = 0; i < size; i++)
 	{
 		if(pBuff[i] == '\n')
@@ -57,8 +57,8 @@ static int printTenLines(void* buff, size_t size, ssize_t *lineCount)
 
 static int readIntoBuffer(int fd, char* buff,  size_t size)
 {
-		int rdRes = 0;
-		int bytesRead = 0;
+		size_t rdRes = 0;
+		size_t bytesRead = 0;
 		do
 		{
 			if((rdRes = read(fd, buff + rdRes, size - bytesRead))>= 0)
