@@ -39,12 +39,12 @@ static ssize_t getFileSize(int fd)
  * @return returns pointer in buffer to begenning of last 10 lines or to begining of buffer if it includes 10 lines or less  
  *  
  * */
-static char* countTenLines(size_t bytes, void* buff)
+static const char* countTenLines(size_t bytes, const void* buff)
 {
 	int i;
 	size_t lineCount = 0;
-	char* retPointer;
-	char* pBuff = buff;
+	const char* retPointer;
+	const char* pBuff = buff;
 	for(i = bytes-2; i >= 0; i--)
 	{
 		if(pBuff[i] == '\n')
@@ -72,13 +72,13 @@ static char* countTenLines(size_t bytes, void* buff)
  * @return returns number of read bytes or 0 if error accurs 
  * 
  */
-static int readIntoBuffer(int fd, void* buff, size_t size)
+static int readIntoBuffer(int fd, const void* buff, size_t size)
 {
 	ssize_t rdRes = 0;
 	size_t bytesRead = 0;
 	do
 	{
-		if((rdRes = read(fd, buff + rdRes, size - bytesRead))>= 0)
+		if((rdRes = read(fd, (void*)(buff + rdRes), size - bytesRead))>= 0)
 		{
 			bytesRead += rdRes;
 		}
@@ -99,7 +99,7 @@ static int readIntoBuffer(int fd, void* buff, size_t size)
  * @param buff - Pionter to buffer to print
  * @param size - Num of bytes to print
  * */
-static int printBuffer(char* buff, unsigned size)
+static int printBuffer(const void* buff, unsigned size)
 {
 	size_t written = 0;
 	ssize_t	wrRes;
@@ -121,8 +121,8 @@ int main(int argc, char* argv[])
 {
 	int myFile;
 	ssize_t fileSize;
-	void* pBuff;
-	void* buff;
+	const void* pBuff;
+	const void* buff;
 
 	if(argc <= 1)
 	{
