@@ -94,7 +94,7 @@ static int readIntoBuffer(int fd, const void* buff, size_t size)
 /**
  * @brief This function prints to STDOUT all bytes in buffer
  * 
- * This fuction calls write command to write bytes from buffer to output
+ * This function calls write command to write bytes from buffer to output
  * 
  * @param buff - Pionter to buffer to print
  * @param size - Num of bytes to print
