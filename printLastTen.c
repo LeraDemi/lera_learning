@@ -74,8 +74,8 @@ static char* countTenLines(size_t bytes, void* buff)
  */
 static int readIntoBuffer(int fd, void* buff, size_t size)
 {
-	int rdRes = 0;
-	int bytesRead = 0;
+	ssize_t rdRes = 0;
+	size_t bytesRead = 0;
 	do
 	{
 		if((rdRes = read(fd, buff + rdRes, size - bytesRead))>= 0)
@@ -102,7 +102,7 @@ static int readIntoBuffer(int fd, void* buff, size_t size)
 static int printBuffer(char* buff, unsigned size)
 {
 	size_t written = 0;
-	int	wrRes;
+	ssize_t	wrRes;
 	while(written < size)
 	{
 		if((wrRes = write(STDOUT_FILENO, buff + written, size - written)) > 0)
