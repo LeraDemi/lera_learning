@@ -55,13 +55,13 @@ static int printTenLines(const void* buff, size_t size, ssize_t *lineCount)
 	return 0;
 }
 
-static int readIntoBuffer(int fd, char* buff,  size_t size)
+static int readIntoBuffer(int fd, const void* buff,  size_t size)
 {
 		size_t rdRes = 0;
 		size_t bytesRead = 0;
 		do
 		{
-			if((rdRes = read(fd, buff + rdRes, size - bytesRead))>= 0)
+			if((rdRes = read(fd, (void*)(buff + rdRes), size - bytesRead))>= 0)
 			{
 				bytesRead += rdRes;
 			}
