@@ -41,7 +41,7 @@ static ssize_t getFileSize(int fd)
  * */
 static const char* countTenLines(size_t bytes, const void* buff)
 {
-	int i;
+	size_t i;
 	size_t lineCount = 0;
 	const char* retPointer;
 	const char* pBuff = buff;
