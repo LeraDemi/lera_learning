@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
 	if(!buff)
 	{
 		perror("Error Allocating Buffer!\n");
+		close(myFile);
 		return EXIT_FAILURE;
 	}
 
@@ -67,6 +68,8 @@ int main(int argc, char* argv[])
 
 	if(readStatus < 0)
 	{
+		free(buff);
+		close(myFile);
 		return EXIT_FAILURE;
 	}
 
