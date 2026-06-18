@@ -44,5 +44,5 @@ int main(int argc, char* argv[])
 	printf("group permissions = %s\n",group);
 	printf("other permissions = %s\n",other);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
