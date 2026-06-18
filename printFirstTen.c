@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include "common.h"
 
 static int printTenLines(const void* buff, size_t size, ssize_t *lineCount)
