@@ -74,10 +74,16 @@ int main(int argc, char* argv[])
 		perror("Error Allocating Buffer!\n");
 		return EXIT_FAILURE;
 	}
-	if(!readIntoBuffer(myFile, buff, fileSize))
+
+	readStatus = readIntoBuffer(myFile, buff, fileSize);
+
+	if(readStatus < 0)
 	{
 		return EXIT_FAILURE;
-		
+	}
+	if(readStatus == 0)
+	{
+		return EXIT_SUCCESS;
 	}
 	pBuff = countTenLines(fileSize, buff);
 
