@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
 	if(!buff)
 	{
 		perror("Error Allocating Buffer!\n");
+		close(myFile);
 		return EXIT_FAILURE;
 	}
 
@@ -77,18 +78,25 @@ int main(int argc, char* argv[])
 
 	if(readStatus < 0)
 	{
+		free(buff);
+		close(myFile);
 		return EXIT_FAILURE;
 	}
 	if(readStatus == 0)
 	{
+		free(buff);
+		close(myFile);
 		return EXIT_SUCCESS;
 	}
 	pBuff = countTenLines(fileSize, buff);
 
 	if(!printBuffer(pBuff, buff + fileSize - pBuff))
 	{
+		free(buff);
+		close(myFile);
 		return EXIT_FAILURE;
 	}
+	close(myFile);
 	return EXIT_SUCCESS;
 }
 
