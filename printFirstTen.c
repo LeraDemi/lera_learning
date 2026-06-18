@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	void* buff;
 	ssize_t lineCount = 10;
 
-	if(argc <= 1)
+	if(argc != 2)
 	{
 		printf("File Please\n ");
 		return EXIT_FAILURE;
