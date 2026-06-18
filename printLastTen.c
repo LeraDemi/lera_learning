@@ -46,7 +46,8 @@ int main(int argc, char* argv[])
 	int myFile;
 	ssize_t fileSize;
 	const void* pBuff;
-	const void* buff;
+	void* buff;
+	int readStatus;
 
 	if(argc <= 1)
 	{
