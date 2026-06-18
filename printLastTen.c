@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include "common.h"
 /**
  * @brief Function counts 10 lines from the end of buffer
