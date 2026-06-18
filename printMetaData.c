@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	}
 	if(stat(argv[1], &sStat))
 	{
-		perror("Error: ");
+		perror("Error");
 		return EXIT_FAILURE;
 	}
 	owner[READ]    = sStat.st_mode & S_IRUSR ? 'r': '.';
