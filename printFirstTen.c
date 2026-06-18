@@ -4,36 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-
-static ssize_t getFileSize(int fd)
-{
-	struct stat sStat;
-	if(fstat(fd, &sStat))
-	{
-		perror("Error File Size!");
-		return -1;
-	}
-	return sStat.st_size;
-}
-
-static int printLine(const void* buff, size_t size)
-{
-	size_t written = 0;
-	ssize_t	wrRes;
-	while(written < size)
-	{
-		if((wrRes = write(STDOUT_FILENO, buff + written, size - written)) > 0)
-		{
-			written += wrRes;
-		}
-		else
-		{
-			perror("Error Printing Buffer");
-			return 0;
-		}
-	}
-	return 1;
-}
+#include "common.h"
 
 static int printTenLines(const void* buff, size_t size, ssize_t *lineCount)
 {
@@ -46,33 +17,13 @@ static int printTenLines(const void* buff, size_t size, ssize_t *lineCount)
 			(*lineCount)--;
 			if(*lineCount == 0)
 			{
-				printLine(buff, i + 1);
+				printBuffer(buff, i + 1);
 				return 1;
 			}
 		}
 	}
-	printLine(buff, size);
+	printBuffer(buff, size);
 	return 0;
-}
-
-static int readIntoBuffer(int fd, const void* buff,  size_t size)
-{
-		size_t rdRes = 0;
-		size_t bytesRead = 0;
-		do
-		{
-			if((rdRes = read(fd, (void*)(buff + rdRes), size - bytesRead))>= 0)
-			{
-				bytesRead += rdRes;
-			}
-			else
-			{
-				perror("Error reading file! ");
-				return -1;
-			}
-	   }
-	   while(rdRes > 0);
-	   return bytesRead;
 }
 
 int main(int argc, char* argv[])
