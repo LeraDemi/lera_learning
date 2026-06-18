@@ -65,21 +65,21 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if((readStatus = readIntoBuffer(myFile, buff, fileSize)) > 0)
-	{
-		while(lineCount > 0)
-		{
-			if(!printTenLines(buff, fileSize, &lineCount))
-			{
-				break;
-			}
-		}
-	}
+	readStatus = readIntoBuffer(myFile, buff, fileSize);
 
 	if(readStatus < 0)
 	{
 		return EXIT_FAILURE;
 	}
+
+	while(lineCount > 0)
+	{
+		if(!printTenLines(buff, fileSize, &lineCount))
+		{
+			break;
+		}
+	}
+
 	close(myFile);
 	return EXIT_SUCCESS;
 }
