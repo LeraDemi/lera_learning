@@ -57,17 +57,20 @@ static void search(char* buff, size_t size, const char* str)
 	{
 		if(pBuff[i] == '\n')
 		{
-			findStringInLine(str, curr_line, count+1);
-			curr_line = buff+i;
+			findStringInLine(str, curr_line, count + 1);
+			curr_line+= count + 1;
 			count = 0;
 		}
-		count++;
+		else
+		{
+			count++;
+		}
 		i++;
 	}
 
 	if(count > 0)
 	{
-		findStringInLine(curr_line, str, size);
+		findStringInLine(str, curr_line, count + 1);
 	}
 }
 int main(int argc, char* argv[])
