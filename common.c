@@ -34,7 +34,7 @@ ssize_t getFileSize(int fd)
  * @return returns number of read bytes or 0 if error accurs
  *
  */
-int readIntoBuffer(int fd, void* buff,  size_t size)
+int readIntoBuffer(int fd, void* buff, size_t size)
 {
 	ssize_t rdRes = 0;
 	size_t bytesRead = 0;
@@ -61,7 +61,7 @@ int readIntoBuffer(int fd, void* buff,  size_t size)
  * @param buff - Pionter to buffer to print
  * @param size - Num of bytes to print
  * */
-int printBuffer(const void* buff, unsigned size)
+int printBuffer(const void* buff, size_t size)
 {
 	size_t written = 0;
 	ssize_t	wrRes;
