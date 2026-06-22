@@ -20,19 +20,18 @@
 static void findStringInLine(const char* str, char* buff, size_t size)
 {
 	size_t i = 0;
-	if(size < strlen(str))
+    size_t strSize = strlen(str);
+
+	if(size < strSize)
 	{
 		return;
 	}
-	while (i < size)
+	while (i < size - (strSize - 1))
 	{
-		if(buff[i] == str[0])
+		if(!memcmp(&buff[i], str, strSize))
 		{
-			if(!memcmp(&buff[i], str, strlen(str)))
-			{
-				printBuffer(buff, size);
-				return;
-			}
+			printBuffer(buff, size);
+			return;
 		}
 		i++;
 	}
@@ -48,7 +47,7 @@ static void findStringInLine(const char* str, char* buff, size_t size)
  * @return - void
  *
  */
-static void search(char* buff, size_t size, char* str)
+static void search(char* buff, size_t size, const char* str)
 {
 	size_t count = 0;
 	size_t i = 0;
@@ -127,7 +126,7 @@ int main(int argc, char* argv[])
 		close(myFile);
 		return EXIT_SUCCESS;
 	}
-	printf("fileSize = %ld string = %s\n", fileSize,string );
+
 	search(buff, fileSize, string);
 
 	close(myFile);
