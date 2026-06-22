@@ -8,9 +8,7 @@
 /**
  * @brief Function looks for string in a line and prints it if found
  *
- * This functon recieves a buffer, its size and a string. It iterates over each character in buffer.
- * If the character matches the first character of the string it calls memcmp().
- * If memcmp return 0 the function calls printBuffer() to print the entire buffer
+ * This functon recieves one line and prints it if string is found within the line
  *
  * @param - str String to find
  * @param - buff Buffer to search in and print
@@ -42,8 +40,6 @@ static void findStringInLine(const char* str, char* buff, size_t size)
 /**
  * @brief Function looks for string in a buffer and prints all lines in which it appears
  *
- * This function iterates over characters in a buffer.
- * Each time it reaches \n it calls findStringInLine to find string in the line
  *
  * @param - buff Buffer to search in and print
  * @param - size of buffer
