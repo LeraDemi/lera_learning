@@ -26,14 +26,13 @@ static void findStringInLine(const char* str, const char* buff, size_t size)
 	{
 		return;
 	}
-	while (i < size - (strSize - 1))
+	for(i = 0;i < size - (strSize - 1); i++)
 	{
 		if(!memcmp(&buff[i], str, strSize))
 		{
 			printBuffer(buff, size);
 			return;
 		}
-		i++;
 	}
 }
 /**
@@ -53,7 +52,7 @@ static void search(const char* buff, size_t size, const char* str)
 	size_t i = 0;
 	const char* pBuff = buff;
 	const char* curr_line = buff;
-	while(i < size - 1)
+	for(i = 0; i < size - 1; i++)
 	{
 		if(pBuff[i] == '\n')
 		{
@@ -65,7 +64,6 @@ static void search(const char* buff, size_t size, const char* str)
 		{
 			count++;
 		}
-		i++;
 	}
 
 	if(count > 0)
