@@ -17,7 +17,7 @@
  * @return - void
  *
  */
-static void findStringInLine(const char* str, char* buff, size_t size)
+static void findStringInLine(const char* str, const char* buff, size_t size)
 {
 	size_t i = 0;
     size_t strSize = strlen(str);
@@ -47,12 +47,12 @@ static void findStringInLine(const char* str, char* buff, size_t size)
  * @return - void
  *
  */
-static void search(char* buff, size_t size, const char* str)
+static void search(const char* buff, size_t size, const char* str)
 {
 	size_t count = 0;
 	size_t i = 0;
-	char* pBuff = buff;
-	char* curr_line = buff;
+	const char* pBuff = buff;
+	const char* curr_line = buff;
 	while(i < size - 1)
 	{
 		if(pBuff[i] == '\n')
